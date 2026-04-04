@@ -35,7 +35,7 @@ Otherwise ask one sharp diagnostic question. After all tasks done, ask: "All don
   try {
     const { conversation, userKey } = req.body;
     const key = userKey || apiKey;
-    const model = 'gemini-1.5-flash';
+    const model = 'gemini-2.5-flash';
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
 
     const response = await fetch(endpoint, {
