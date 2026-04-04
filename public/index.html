@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nudge — Get unstuck, now</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f9f8f5;
+    --surface: #ffffff;
+    --border: #e8e5de;
+    --text: #1a1917;
+    --muted: #8a8680;
+    --accent: #1a1917;
+    --user-bg: #f0ede6;
+    --limit-bg: #fef3e2;
+    --limit-border: #f5d98a;
+    --limit-text: #92650a;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    padding: 2rem 2rem 0;
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .wordmark {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .tagline {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  main {
+    flex: 1;
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-feed {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .msg {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .msg-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .msg-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .msg.user .msg-body {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .thinking-dots {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 4px 0;
+  }
+  .thinking-dots span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 0%,80%,100% { opacity: 0.2; } 40% { opacity: 1; } }
+
+  .plan-section {
+    margin: 0.5rem 0 1rem;
+  }
+
+  .plan-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .task:first-of-type { border-top: 1px solid var(--border); }
+  .task.done { opacity: 0.35; }
+  .task.done .task-text { text-decoration: line-through; }
+
+  .check {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .check.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .check.checked::after {
+    content: '';
+    width: 9px;
+    height: 5px;
+    border-left: 1.5px solid white;
+    border-bottom: 1.5px solid white;
+    transform: rotate(-45deg) translate(0, -1px);
+    display: block;
+  }
+
+  .task-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .limit-banner {
+    background: var(--limit-bg);
+    border: 1px solid var(--limit-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .limit-banner.visible { display: block; }
+  .limit-banner p {
+    font-size: 13px;
+    color: var(--limit-text);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .limit-banner input {
+    width: 100%;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--limit-border);
+    background: white;
+    color: var(--text);
+    outline: none;
+    margin-bottom: 8px;
+  }
+  .limit-banner input:focus { border-color: var(--accent); }
+  .limit-save {
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  textarea {
+    flex: 1;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    resize: none;
+    min-height: 44px;
+    max-height: 160px;
+    outline: none;
+    transition: border-color 0.15s;
+    overflow-y: hidden;
+  }
+  textarea:focus { border-color: #c0bdb5; }
+  textarea::placeholder { color: var(--muted); }
+
+  .send {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s;
+  }
+  .send:disabled { opacity: 0.3; cursor: not-allowed; }
+  .send svg { width: 16px; height: 16px; }
+
+  .nudges-left {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1rem 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">Nudge</div>
+  <div class="tagline">Tell me where you're stuck. I'll tell you exactly what to do next.</div>
+</header>
+
+<main>
+  <div class="chat-feed" id="chatFeed"></div>
+
+  <div class="plan-section" id="planSection" style="display:none;">
+    <div class="plan-label">Your plan</div>
+    <div id="taskList"></div>
+  </div>
+
+  <div class="limit-banner" id="limitBanner">
+    <p>You've used your 5 free nudges. Enter your Gemini API key to keep going — it's free to get one.</p>
+    <input type="password" id="userKeyInput" placeholder="AIza..." />
+    <button class="limit-save" onclick="saveUserKey()">Save & continue</button>
+  </div>
+
+  <div class="input-row">
+    <textarea id="input" placeholder="I'm stuck on..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="send" id="sendBtn" onclick="send()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 8h12M8 2l6 6-6 6"/>
+      </svg>
+    </button>
+  </div>
+  <div class="nudges-left" id="nudgesLeft"></div>
+</main>
+
+<script>
+const FREE_LIMIT = 5;
+const SYSTEM_PROMPT = `You are Nudge — a brutally honest career coach for product managers making a job switch.
+
+Your core belief: Volume beats paralysis. But smart, targeted volume beats spray and pray.
+
+Your rules:
+1. Never give 5 generic tips. Always ask one sharp question back OR give a specific action plan.
+2. Diagnose the real problem — users say they're "confused" but usually they're avoiding rejection or overthinking.
+3. Call out avoidance behavior directly but kindly.
+4. When generating an action plan, make tasks hyper-specific. Not "apply to startups" but "Apply to 10 B2B SaaS fintech startups in SF with 50-200 employees, Series A funded in last 6 months — message their founder + HR on LinkedIn today."
+5. Back recommendations with reasoning (market data, hiring patterns, company stage logic).
+6. Keep responses short and direct. No fluff. No bullet lists unless it's the plan.
+7. Max 2 diagnostic questions before generating a plan.
+
+When you have enough context to generate an action plan, output it in this EXACT format and nothing else after it:
+
+PLAN:
+- [specific task 1]
+- [specific task 2]
+- [specific task 3]
+END_PLAN
+
+Otherwise ask one sharp diagnostic question. After all tasks done, ask: "All done — what's feeling hard now?"`;
+
+let conversation = [];
+let tasks = [];
+let msgCount = parseInt(localStorage.getItem('nudge_count') || '0');
+let userKey = localStorage.getItem('nudge_user_key') || '';
+
+function updateNudgesLeft() {
+  const el = document.getElementById('nudgesLeft');
+  if (userKey) { el.textContent = ''; return; }
+  const left = Math.max(0, FREE_LIMIT - msgCount);
+  el.textContent = left > 0 ? `${left} free nudge${left === 1 ? '' : 's'} remaining` : '';
+}
+
+function saveUserKey() {
+  const k = document.getElementById('userKeyInput').value.trim();
+  if (!k) return;
+  localStorage.setItem('nudge_user_key', k);
+  userKey = k;
+  document.getElementById('limitBanner').classList.remove('visible');
+  updateNudgesLeft();
+  document.getElementById('input').focus();
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+}
+
+function addMsg(role, text) {
+  const feed = document.getElementById('chatFeed');
+  const wrap = document.createElement('div');
+  wrap.className = `msg ${role}`;
+  wrap.innerHTML = `
+    <div class="msg-label">${role === 'coach' ? 'Nudge' : 'You'}</div>
+    <div class="msg-body">${text.replace(/\n/g, '<br>')}</div>
+  `;
+  feed.appendChild(wrap);
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function addThinking() {
+  const feed = document.getElementById('chatFeed');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg coach';
+  wrap.id = 'thinking';
+  wrap.innerHTML = `<div class="msg-label">Nudge</div><div class="thinking-dots"><span></span><span></span><span></span></div>`;
+  feed.appendChild(wrap);
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function removeThinking() {
+  const t = document.getElementById('thinking');
+  if (t) t.remove();
+}
+
+function parsePlan(text) {
+  const m = text.match(/PLAN:\n([\s\S]*?)END_PLAN/);
+  if (!m) return null;
+  return m[1].trim().split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(Boolean);
+}
+
+function cleanText(text) {
+  return text.replace(/PLAN:\n[\s\S]*?END_PLAN/g, '').trim();
+}
+
+function renderTasks() {
+  const section = document.getElementById('planSection');
+  const list = document.getElementById('taskList');
+  if (tasks.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  list.innerHTML = '';
+  tasks.forEach((t, i) => {
+    const div = document.createElement('div');
+    div.className = `task${t.done ? ' done' : ''}`;
+    div.innerHTML = `<div class="check${t.done ? ' checked' : ''}"></div><div class="task-text">${t.text}</div>`;
+    div.onclick = () => toggleTask(i);
+    list.appendChild(div);
+  });
+}
+
+function toggleTask(i) {
+  tasks[i].done = !tasks[i].done;
+  renderTasks();
+  if (tasks.length > 0 && tasks.every(t => t.done)) {
+    setTimeout(() => {
+      tasks = [];
+      conversation = [];
+      renderTasks();
+      const feed = document.getElementById('chatFeed');
+      const div = document.createElement('div');
+      div.className = 'divider';
+      feed.appendChild(div);
+      addMsg('coach', "All done — what's feeling hard now?");
+    }, 700);
+  }
+}
+
+async function send() {
+  const input = document.getElementById('input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (!userKey && msgCount >= FREE_LIMIT) {
+    document.getElementById('limitBanner').classList.add('visible');
+    return;
+  }
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+
+  addMsg('user', text);
+  conversation.push({ role: 'user', parts: [{ text }] });
+
+  msgCount++;
+  if (!userKey) localStorage.setItem('nudge_count', msgCount);
+  updateNudgesLeft();
+
+  addThinking();
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ conversation, userKey: userKey || null })
+    });
+
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || 'Something went wrong.';
+
+    conversation.push({ role: 'model', parts: [{ text: reply }] });
+
+    removeThinking();
+
+    const plan = parsePlan(reply);
+    const clean = cleanText(reply);
+    if (clean) addMsg('coach', clean);
+
+    if (plan) {
+      tasks = plan.map(t => ({ text: t, done: false }));
+      renderTasks();
+    }
+
+  } catch (err) {
+    removeThinking();
+    addMsg('coach', 'Could not reach the API. Check your connection and try again.');
+  }
+
+  document.getElementById('sendBtn').disabled = false;
+  updateNudgesLeft();
+  input.focus();
+}
+
+updateNudgesLeft();
+addMsg('coach', "What's stuck right now?");
+</script>
+</body>
+</html>
