@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nudge — Career coaching that moves you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F5F0E8;
+  --surface: #FAFAF8;
+  --surface-white: #ffffff;
+  --border: rgba(44,44,42,0.1);
+  --border-soft: rgba(44,44,42,0.06);
+  --border-warm: #E8DFD0;
+  --text: #2C2C2A;
+  --text-mid: #5F5E5A;
+  --text-soft: #888780;
+  --sage: #7A9E8A;
+  --sage-light: #EAF1EC;
+  --sage-mid: #C4D9CC;
+  --sage-dark: #4a7a60;
+  --amber: #BA7517;
+  --amber-light: #FDF4E4;
+  --amber-mid: #F5D98A;
+  --coral: #D85A30;
+  --coral-light: #FAECE7;
+  --blue: #185FA5;
+  --blue-light: #E6F1FB;
+  --accent: #9B8FA0;
+  --accent-light: #EDE9F0;
+  --warm-mid: #E8DFD0;
+  --limit-bg: #fef3e2;
+  --limit-border: #f5d98a;
+  --limit-text: #92650a;
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  height: 100vh;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  height: 100vh;
+  background: var(--bg);
+  border-right: 0.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.sidebar-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--text);
+  padding: 28px 22px 20px;
+  letter-spacing: -0.4px;
+}
+.sidebar-logo span { color: var(--sage); }
+
+.sidebar-section { padding: 0 12px; margin-bottom: 6px; }
+.sidebar-label {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  padding: 0 10px;
+  margin-bottom: 4px;
+  font-family: 'DM Mono', monospace;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+  position: relative;
+}
+.nav-item:hover { background: var(--warm-mid); color: var(--text); }
+.nav-item.active { background: var(--sage-light); color: var(--sage); font-weight: 500; }
+.nav-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+.nav-label { flex: 1; }
+.nav-badge {
+  background: var(--sage);
+  color: white;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-family: 'DM Mono', monospace;
+}
+.nav-badge.amber { background: var(--amber); }
+
+.sidebar-divider { height: 0.5px; background: var(--border); margin: 10px 20px; }
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 12px 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.streak-card {
+  background: var(--amber-light);
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 0.5px solid rgba(186,117,23,0.2);
+}
+.streak-top { font-size: 11px; color: var(--amber); font-weight: 500; margin-bottom: 2px; }
+.streak-num { font-size: 24px; font-family: 'DM Serif Display', serif; color: var(--text); line-height: 1; }
+.streak-sub { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+
+.key-entry {
+  background: white;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 0.5px solid var(--border);
+  font-size: 11.5px;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.key-entry:hover { border-color: var(--sage-mid); color: var(--sage); }
+
+/* ─── MAIN ─── */
+.main {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+/* ─── TOPBAR ─── */
+.topbar {
+  display: flex;
+  align-items: center;
+  padding: 18px 28px;
+  border-bottom: 0.5px solid var(--border-soft);
+  gap: 12px;
+  flex-shrink: 0;
+  background: var(--surface);
+}
+.topbar-info { flex: 1; }
+.topbar-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.topbar-sub { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+.chip {
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border);
+  color: var(--text-mid);
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.chip:hover { border-color: var(--sage-mid); color: var(--sage); }
+.chip.active { background: var(--sage-light); color: var(--sage); border-color: var(--sage-mid); font-weight: 500; }
+
+.btn-primary {
+  background: var(--sage);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary:hover { background: var(--sage-dark); }
+
+/* ─── VIEWS ─── */
+.view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+.view.active { display: flex; }
+
+/* ─── CHAT VIEW ─── */
+.chat-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scroll-behavior: smooth;
+}
+.chat-scroll::-webkit-scrollbar { width: 4px; }
+.chat-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.msg { display: flex; flex-direction: column; gap: 4px; max-width: 560px; }
+.msg.user { align-self: flex-end; align-items: flex-end; }
+.msg-label {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.msg-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text);
+  background: white;
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+.msg.user .msg-body {
+  background: var(--sage-light);
+  border-color: var(--sage-mid);
+  color: var(--text);
+  font-size: 14px;
+  border-radius: 14px 14px 4px 14px;
+}
+.msg.coach .msg-body { border-radius: 4px 14px 14px 14px; }
+
+.thinking-dots { display: flex; gap: 5px; align-items: center; padding: 6px 2px; }
+.thinking-dots span {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--text-soft);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pulse { 0%,80%,100% { opacity: 0.2; } 40% { opacity: 1; } }
+
+/* ─── PLAN / TASKS ─── */
+.plan-block {
+  background: white;
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  max-width: 560px;
+}
+.plan-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--sage-light);
+  border-bottom: 0.5px solid var(--sage-mid);
+}
+.plan-header-text { font-size: 12px; font-weight: 500; color: var(--sage); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; text-transform: uppercase; }
+.plan-progress { margin-left: auto; font-size: 11px; color: var(--sage); }
+.task-list { padding: 4px 0; }
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 16px;
+  border-bottom: 0.5px solid var(--border-soft);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.task:last-child { border-bottom: none; }
+.task:hover { background: #fafaf8; }
+.task.done { opacity: 0.4; }
+.task.done .task-text { text-decoration: line-through; }
+.check {
+  width: 18px; height: 18px; min-width: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border);
+  background: white;
+  margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.check.checked { background: var(--sage); border-color: var(--sage); }
+.check.checked::after {
+  content: '';
+  width: 9px; height: 5px;
+  border-left: 1.5px solid white;
+  border-bottom: 1.5px solid white;
+  transform: rotate(-45deg) translate(0, -1px);
+  display: block;
+}
+.task-text { font-size: 13.5px; line-height: 1.6; color: var(--text); }
+
+/* ─── CHAT INPUT ─── */
+.chat-input-wrap {
+  padding: 16px 28px 20px;
+  border-top: 0.5px solid var(--border-soft);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.input-row { display: flex; gap: 8px; align-items: flex-end; }
+.nudge-textarea {
+  flex: 1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 0.5px solid var(--border);
+  background: white;
+  color: var(--text);
+  resize: none;
+  min-height: 46px;
+  max-height: 160px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.nudge-textarea:focus { border-color: var(--sage-mid); }
+.nudge-textarea::placeholder { color: var(--text-soft); }
+.send-btn {
+  width: 46px; height: 46px; min-width: 46px;
+  border-radius: 12px;
+  border: none;
+  background: var(--sage);
+  color: white;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.send-btn:hover { background: var(--sage-dark); }
+.send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.send-btn svg { width: 16px; height: 16px; }
+
+.chat-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.nudges-left {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-soft);
+}
+
+/* ─── LIMIT BANNER ─── */
+.limit-banner {
+  background: var(--limit-bg);
+  border: 0.5px solid var(--limit-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: none;
+}
+.limit-banner.visible { display: block; }
+.limit-banner p { font-size: 13px; color: var(--limit-text); line-height: 1.6; margin-bottom: 10px; }
+.limit-banner input {
+  width: 100%;
+  font-size: 13px;
+  font-family: 'DM Mono', monospace;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 0.5px solid var(--limit-border);
+  background: white;
+  color: var(--text);
+  outline: none;
+  margin-bottom: 8px;
+}
+.limit-banner input:focus { border-color: var(--sage); }
+.limit-save {
+  font-size: 12px;
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--text);
+  color: white;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
+
+/* ─── JOB TRACKER VIEW ─── */
+.tracker-stats {
+  display: flex;
+  gap: 10px;
+  padding: 14px 28px;
+  border-bottom: 0.5px solid var(--border-soft);
+  flex-shrink: 0;
+}
+.stat-pill {
+  flex: 1;
+  background: white;
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+.stat-num { font-size: 22px; font-family: 'DM Serif Display', serif; color: var(--text); line-height: 1.1; }
+.stat-label { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+.stat-pill.urgent { border-color: rgba(186,117,23,0.3); background: var(--amber-light); }
+.stat-pill.urgent .stat-num { color: var(--amber); }
+
+.kanban-wrap {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 18px 28px 24px;
+  display: flex;
+  gap: 14px;
+}
+.kanban-wrap::-webkit-scrollbar { height: 4px; }
+.kanban-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.col { width: 210px; min-width: 210px; display: flex; flex-direction: column; gap: 8px; }
+.col-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 2px 8px;
+}
+.col-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.col-name { font-size: 12px; font-weight: 500; color: var(--text-mid); }
+.col-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-soft);
+  background: var(--bg);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+}
+
+.col-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.col-scroll::-webkit-scrollbar { width: 0; }
+
+.jcard {
+  background: white;
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.jcard:hover { border-color: var(--sage-mid); box-shadow: 0 2px 12px rgba(122,158,138,0.1); }
+.jcard.selected { border-color: var(--sage); box-shadow: 0 0 0 2px var(--sage-light); }
+.jcard.followup { border-color: rgba(186,117,23,0.3); }
+.followup-banner {
+  background: var(--amber-light);
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-size: 11px;
+  color: var(--amber);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.jcard-company { font-size: 11px; color: var(--text-soft); margin-bottom: 3px; }
+.jcard-role { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; line-height: 1.35; }
+.jcard-meta { display: flex; gap: 5px; flex-wrap: wrap; }
+.jmeta {
+  font-size: 10.5px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.jmeta.location { background: var(--bg); color: var(--text-soft); }
+.jmeta.salary { background: var(--sage-light); color: var(--sage); }
+.jmeta.remote { background: var(--blue-light); color: var(--blue); }
+.jmeta.urgent { background: var(--amber-light); color: var(--amber); }
+.jmeta.match { background: var(--sage-light); color: var(--sage); }
+.jmeta.rejected { background: #f5f5f5; color: var(--text-soft); }
+
+.jcard-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border-soft);
+}
+.jcard-date { font-size: 11px; color: var(--text-soft); }
+.jcard-nudge-dot { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; }
+
+.col-add {
+  border: 0.5px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.col-add:hover { border-color: var(--sage-mid); color: var(--sage); background: var(--sage-light); }
+
+/* ─── JOB DETAIL PANEL ─── */
+.detail-panel {
+  width: 260px;
+  min-width: 260px;
+  border-left: 0.5px solid var(--border);
+  background: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.2s;
+}
+.detail-panel.hidden { width: 0; min-width: 0; overflow: hidden; border: none; }
+
+.dp-header {
+  padding: 18px 18px 14px;
+  border-bottom: 0.5px solid var(--border-soft);
+  flex-shrink: 0;
+}
+.dp-co { font-size: 11px; color: var(--text-soft); margin-bottom: 3px; }
+.dp-role { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.3; }
+.dp-stage {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.dp-stage.interviewing { background: var(--sage-light); color: var(--sage); }
+.dp-stage.applied { background: var(--blue-light); color: var(--blue); }
+.dp-stage.offer { background: var(--amber-light); color: var(--amber); }
+.dp-stage.saved { background: var(--bg); color: var(--text-soft); }
+
+.dp-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dp-body::-webkit-scrollbar { width: 3px; }
+.dp-body::-webkit-scrollbar-thumb { background: var(--border); }
+
+.dp-section-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+  font-family: 'DM Mono', monospace;
+}
+
+.nudge-suggestion {
+  background: var(--sage-light);
+  border-radius: 10px;
+  padding: 12px 13px;
+  border: 0.5px solid var(--sage-mid);
+}
+.ns-label {
+  font-size: 10px;
+  color: var(--sage);
+  font-weight: 500;
+  margin-bottom: 5px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+.ns-text { font-size: 12.5px; color: var(--text); line-height: 1.55; }
+.ns-btn {
+  margin-top: 10px;
+  background: var(--sage);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.ns-btn:hover { background: var(--sage-dark); }
+
+.timeline { display: flex; flex-direction: column; }
+.tl-item {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 14px;
+  position: relative;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-line {
+  position: absolute;
+  left: 7px;
+  top: 16px;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+.tl-item:last-child .tl-line { display: none; }
+.tl-dot {
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: white;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.tl-dot.done { background: var(--sage); border-color: var(--sage); }
+.tl-dot.pending { border-color: var(--amber); background: white; }
+.tl-event { font-size: 12px; font-weight: 500; color: var(--text); }
+.tl-date { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
+
+.score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.score-row:last-child { margin-bottom: 0; }
+.score-label-text { font-size: 11px; color: var(--text-soft); width: 55px; flex-shrink: 0; }
+.score-bar-bg { flex: 1; height: 4px; background: var(--warm-mid); border-radius: 20px; overflow: hidden; }
+.score-bar-fill { height: 100%; background: var(--sage); border-radius: 20px; }
+.score-val { font-size: 11px; font-weight: 500; color: var(--text); width: 30px; text-align: right; }
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--border-soft);
+}
+.contact-row:last-child { border-bottom: none; }
+.avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.contact-name { font-size: 12px; font-weight: 500; color: var(--text); }
+.contact-role { font-size: 11px; color: var(--text-soft); }
+.contact-action {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--sage);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* ─── ADD JOB MODAL ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44,44,42,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.modal-overlay.visible { opacity: 1; pointer-events: all; }
+.modal {
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  width: 460px;
+  max-width: 90vw;
+  transform: translateY(8px);
+  transition: transform 0.2s;
+  border: 0.5px solid var(--border);
+}
+.modal-overlay.visible .modal { transform: translateY(0); }
+.modal-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.form-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.form-field { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 11px; color: var(--text-soft); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; text-transform: uppercase; }
+.form-input {
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  font-size: 13.5px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.form-input:focus { border-color: var(--sage-mid); background: white; }
+.form-select {
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 0.5px solid var(--border);
+  background: var(--bg);
+  font-size: 13.5px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.15s;
+}
+.form-select:focus { border-color: var(--sage-mid); background: white; }
+.modal-actions { display: flex; gap: 8px; margin-top: 20px; justify-content: flex-end; }
+.btn-cancel {
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-cancel:hover { background: var(--bg); }
+.btn-add-job {
+  background: var(--sage);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-add-job:hover { background: var(--sage-dark); }
+
+/* ─── EMPTY STATE ─── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  color: var(--text-soft);
+  font-size: 13px;
+  height: 100%;
+  text-align: center;
+}
+.empty-icon { font-size: 28px; opacity: 0.4; }
+
+/* ─── MOBILE ─── */
+@media (max-width: 700px) {
+  .sidebar { display: none; }
+  .topbar { padding: 14px 18px; }
+  .chat-scroll { padding: 18px; }
+  .chat-input-wrap { padding: 12px 18px 16px; }
+  .tracker-stats { padding: 12px 18px; flex-wrap: wrap; }
+  .kanban-wrap { padding: 14px 18px 20px; }
+  .detail-panel { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─── -->
+<nav class="sidebar">
+  <div class="sidebar-logo">nudge<span>.</span></div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Today</div>
+    <div class="nav-item active" onclick="showView('chat')" id="nav-chat">
+      <span class="nav-icon">◆</span>
+      <span class="nav-label">My nudges</span>
+      <span class="nav-badge" id="nudge-badge">1</span>
+    </div>
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Focus</div>
+    <div class="nav-item" onclick="showView('tracker')" id="nav-tracker">
+      <span class="nav-icon">⊞</span>
+      <span class="nav-label">Job tracker</span>
+      <span class="nav-badge amber" id="tracker-badge">0</span>
+    </div>
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Reflect</div>
+    <div class="nav-item" onclick="showView('chat')" style="pointer-events:none;opacity:0.4;">
+      <span class="nav-icon">◇</span>
+      <span class="nav-label">Wins log</span>
+    </div>
+    <div class="nav-item" style="pointer-events:none;opacity:0.4;">
+      <span class="nav-icon">◇</span>
+      <span class="nav-label">Patterns</span>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="streak-card">
+      <div class="streak-top">⬡ Streak</div>
+      <div class="streak-num" id="streakNum">1</div>
+      <div class="streak-sub">days checking in</div>
+    </div>
+    <div class="key-entry" onclick="showKeyModal()">🔑 API key settings</div>
+  </div>
+</nav>
+
+<!-- ─── MAIN ─── -->
+<div class="main">
+
+  <!-- ─── CHAT VIEW ─── -->
+  <div class="view active" id="view-chat">
+    <div class="topbar">
+      <div class="topbar-info">
+        <div class="topbar-title">Your nudge</div>
+        <div class="topbar-sub">Tell me what's stuck. I'll give you a plan.</div>
+      </div>
+    </div>
+    <div class="chat-scroll" id="chatFeed"></div>
+    <div id="planSection" style="display:none; padding: 0 28px 8px;">
+      <div class="plan-block">
+        <div class="plan-header">
+          <span class="plan-header-text">Your plan</span>
+          <span class="plan-progress" id="planProgress"></span>
+        </div>
+        <div class="task-list" id="taskList"></div>
+      </div>
+    </div>
+    <div class="chat-input-wrap">
+      <div class="limit-banner" id="limitBanner">
+        <p>You've used your 5 free nudges. Enter your Gemini API key to keep going — get one free at aistudio.google.com</p>
+        <input type="password" id="userKeyInput" placeholder="AIza..." />
+        <button class="limit-save" onclick="saveUserKey()">Save & continue</button>
+      </div>
+      <div class="input-row">
+        <textarea class="nudge-textarea" id="input" placeholder="What's on your mind? I'm stuck on..." rows="1"
+          onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="send()">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 8h12M8 2l6 6-6 6"/>
+          </svg>
+        </button>
+      </div>
+      <div class="chat-footer">
+        <div class="nudges-left" id="nudgesLeft"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── JOB TRACKER VIEW ─── -->
+  <div class="view" id="view-tracker">
+    <div class="topbar">
+      <div class="topbar-info">
+        <div class="topbar-title">Job tracker</div>
+        <div class="topbar-sub" id="tracker-subtitle">Loading...</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-primary" onclick="openAddJob()">+ Add role</button>
+      </div>
+    </div>
+    <div class="tracker-stats" id="trackerStats"></div>
+    <div style="display:flex; flex:1; overflow:hidden;">
+      <div class="kanban-wrap" id="kanbanWrap"></div>
+      <div class="detail-panel hidden" id="detailPanel"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── ADD JOB MODAL ─── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalIfBg(event)">
+  <div class="modal">
+    <div class="modal-title">Add a role</div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Company</div>
+        <input class="form-input" id="f-company" placeholder="e.g. Stripe" />
+      </div>
+      <div class="form-field">
+        <div class="form-label">Role</div>
+        <input class="form-input" id="f-role" placeholder="e.g. Senior PM" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Location</div>
+        <input class="form-input" id="f-location" placeholder="Remote / SF" />
+      </div>
+      <div class="form-field">
+        <div class="form-label">Salary</div>
+        <input class="form-input" id="f-salary" placeholder="$140k" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Stage</div>
+        <select class="form-select" id="f-stage">
+          <option value="saved">Saved</option>
+          <option value="applied">Applied</option>
+          <option value="interviewing">Interviewing</option>
+          <option value="offer">Offer</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <div class="form-label">Work type</div>
+        <select class="form-select" id="f-type">
+          <option value="">—</option>
+          <option value="Remote">Remote</option>
+          <option value="Hybrid">Hybrid</option>
+          <option value="On-site">On-site</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Notes</div>
+        <input class="form-input" id="f-notes" placeholder="Optional note..." />
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAddJob()">Cancel</button>
+      <button class="btn-add-job" onclick="addJob()">Add role</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────
+const FREE_LIMIT = 5;
+let conversation = [];
+let tasks = [];
+let msgCount = parseInt(localStorage.getItem('nudge_count') || '0');
+let userKey = localStorage.getItem('nudge_user_key') || '';
+let selectedJobId = null;
+
+// ─── JOB STORE ────────────────────────────────────────────
+function loadJobs() {
+  try { return JSON.parse(localStorage.getItem('nudge_jobs') || '[]'); } catch { return []; }
+}
+function saveJobs(jobs) {
+  localStorage.setItem('nudge_jobs', JSON.stringify(jobs));
+}
+
+// ─── STREAK ───────────────────────────────────────────────
+function updateStreak() {
+  const today = new Date().toDateString();
+  const lastVisit = localStorage.getItem('nudge_last_visit');
+  let streak = parseInt(localStorage.getItem('nudge_streak') || '0');
+  if (lastVisit !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    streak = lastVisit === yesterday ? streak + 1 : 1;
+    localStorage.setItem('nudge_last_visit', today);
+    localStorage.setItem('nudge_streak', streak);
+  }
+  document.getElementById('streakNum').textContent = streak;
+}
+
+// ─── VIEW SWITCHING ────────────────────────────────────────
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  if (name === 'tracker') renderTracker();
+}
+
+// ─── NUDGE COUNT ──────────────────────────────────────────
+function updateNudgesLeft() {
+  const el = document.getElementById('nudgesLeft');
+  if (!el) return;
+  if (userKey) { el.textContent = ''; return; }
+  const left = Math.max(0, FREE_LIMIT - msgCount);
+  el.textContent = left > 0 ? `${left} free nudge${left === 1 ? '' : 's'} remaining` : '';
+}
+
+function saveUserKey() {
+  const k = document.getElementById('userKeyInput').value.trim();
+  if (!k) return;
+  localStorage.setItem('nudge_user_key', k);
+  userKey = k;
+  document.getElementById('limitBanner').classList.remove('visible');
+  updateNudgesLeft();
+  document.getElementById('input').focus();
+}
+
+function showKeyModal() {
+  document.getElementById('limitBanner').classList.add('visible');
+  showView('chat');
+}
+
+// ─── CHAT HELPERS ─────────────────────────────────────────
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+}
+
+function addMsg(role, text) {
+  const feed = document.getElementById('chatFeed');
+  const wrap = document.createElement('div');
+  wrap.className = `msg ${role}`;
+  const labelText = role === 'coach' ? 'Nudge' : 'You';
+  wrap.innerHTML = `<div class="msg-label">${labelText}</div><div class="msg-body">${text.replace(/\n/g, '<br>')}</div>`;
+  feed.appendChild(wrap);
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  return wrap;
+}
+
+function addThinking() {
+  const feed = document.getElementById('chatFeed');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg coach';
+  wrap.id = 'thinking';
+  wrap.innerHTML = `<div class="msg-label">Nudge</div><div class="msg-body" style="padding:10px 16px;"><div class="thinking-dots"><span></span><span></span><span></span></div></div>`;
+  feed.appendChild(wrap);
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function removeThinking() {
+  const t = document.getElementById('thinking');
+  if (t) t.remove();
+}
+
+// ─── PLAN / TASKS ─────────────────────────────────────────
+function parsePlan(text) {
+  const m = text.match(/PLAN:\n([\s\S]*?)END_PLAN/);
+  if (!m) return null;
+  return m[1].trim().split('\n').map(l => l.replace(/^-\s*/, '').trim()).filter(Boolean);
+}
+
+function cleanText(text) {
+  return text.replace(/PLAN:\n[\s\S]*?END_PLAN/g, '').trim();
+}
+
+function renderTasks() {
+  const section = document.getElementById('planSection');
+  const list = document.getElementById('taskList');
+  const progress = document.getElementById('planProgress');
+  if (!tasks.length) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  const done = tasks.filter(t => t.done).length;
+  progress.textContent = `${done}/${tasks.length}`;
+  list.innerHTML = '';
+  tasks.forEach((t, i) => {
+    const div = document.createElement('div');
+    div.className = `task${t.done ? ' done' : ''}`;
+    div.innerHTML = `<div class="check${t.done ? ' checked' : ''}"></div><div class="task-text">${t.text}</div>`;
+    div.onclick = () => toggleTask(i);
+    list.appendChild(div);
+  });
+}
+
+function toggleTask(i) {
+  tasks[i].done = !tasks[i].done;
+  renderTasks();
+  if (tasks.length > 0 && tasks.every(t => t.done)) {
+    setTimeout(() => {
+      tasks = [];
+      conversation = [];
+      renderTasks();
+      const feed = document.getElementById('chatFeed');
+      const div = document.createElement('div');
+      div.style.cssText = 'height:1px;background:var(--border);margin:8px 0;';
+      feed.appendChild(div);
+      addMsg('coach', "All done — what's feeling hard now?");
+    }, 700);
+  }
+}
+
+// ─── SEND ─────────────────────────────────────────────────
+async function send() {
+  const input = document.getElementById('input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (!userKey && msgCount >= FREE_LIMIT) {
+    document.getElementById('limitBanner').classList.add('visible');
+    return;
+  }
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+
+  addMsg('user', text);
+  conversation.push({ role: 'user', parts: [{ text }] });
+
+  msgCount++;
+  if (!userKey) localStorage.setItem('nudge_count', msgCount);
+  updateNudgesLeft();
+  addThinking();
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ conversation, userKey: userKey || null })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'API error');
+
+    const reply = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || 'Something went wrong.';
+    conversation.push({ role: 'model', parts: [{ text: reply }] });
+
+    removeThinking();
+    const plan = parsePlan(reply);
+    const clean = cleanText(reply);
+    if (clean) addMsg('coach', clean);
+    if (plan) {
+      tasks = plan.map(t => ({ text: t, done: false }));
+      renderTasks();
+    }
+  } catch (err) {
+    removeThinking();
+    addMsg('coach', 'Error: ' + err.message);
+  }
+
+  document.getElementById('sendBtn').disabled = false;
+  updateNudgesLeft();
+  input.focus();
+}
+
+// ─── JOB TRACKER ──────────────────────────────────────────
+const COLUMNS = [
+  { id: 'saved',        label: 'Saved',        dot: '#B4B2A9' },
+  { id: 'applied',      label: 'Applied',      dot: '#378ADD' },
+  { id: 'interviewing', label: 'Interviewing', dot: '#7A9E8A' },
+  { id: 'offer',        label: 'Offer',        dot: '#BA7517' },
+  { id: 'closed',       label: 'Closed',       dot: '#D4C4C4' },
+];
+
+function isFollowupDue(job) {
+  if (job.stage !== 'applied' || !job.appliedDate) return false;
+  const days = Math.floor((Date.now() - new Date(job.appliedDate).getTime()) / 86400000);
+  return days >= 5;
+}
+
+function followupDays(job) {
+  if (!job.appliedDate) return 0;
+  return Math.floor((Date.now() - new Date(job.appliedDate).getTime()) / 86400000);
+}
+
+function renderTracker() {
+  const jobs = loadJobs();
+  const followups = jobs.filter(j => isFollowupDue(j)).length;
+  document.getElementById('tracker-badge').textContent = followups;
+
+  // Stats
+  const total = jobs.filter(j => j.stage !== 'closed').length;
+  const interviewing = jobs.filter(j => j.stage === 'interviewing').length;
+  const offers = jobs.filter(j => j.stage === 'offer').length;
+  document.getElementById('tracker-subtitle').textContent = total + ' active application' + (total !== 1 ? 's' : '');
+  document.getElementById('trackerStats').innerHTML = `
+    <div class="stat-pill"><div class="stat-num">${total}</div><div class="stat-label">Active roles</div></div>
+    <div class="stat-pill"><div class="stat-num">${interviewing}</div><div class="stat-label">Interviewing</div></div>
+    <div class="stat-pill urgent"><div class="stat-num">${followups}</div><div class="stat-label">Follow-up due</div></div>
+    <div class="stat-pill"><div class="stat-num">${offers}</div><div class="stat-label">Offers</div></div>
+  `;
+
+  // Kanban
+  const wrap = document.getElementById('kanbanWrap');
+  wrap.innerHTML = '';
+  COLUMNS.forEach(col => {
+    const colJobs = jobs.filter(j => j.stage === col.id);
+    const colEl = document.createElement('div');
+    colEl.className = 'col';
+    colEl.innerHTML = `
+      <div class="col-header">
+        <div class="col-dot" style="background:${col.dot}"></div>
+        <div class="col-name">${col.label}</div>
+        <div class="col-count">${colJobs.length}</div>
+      </div>
+      <div class="col-scroll" id="col-${col.id}"></div>
+      ${col.id !== 'closed' ? `<div class="col-add" onclick="openAddJob('${col.id}')">+ Add</div>` : ''}
+    `;
+    wrap.appendChild(colEl);
+
+    const scroll = colEl.querySelector('.col-scroll');
+    if (colJobs.length === 0) {
+      scroll.innerHTML = `<div style="font-size:12px;color:var(--text-soft);padding:10px 4px;">No roles here</div>`;
+    }
+    colJobs.forEach(job => {
+      const card = buildJobCard(job);
+      scroll.appendChild(card);
+    });
+  });
+}
+
+function buildJobCard(job) {
+  const div = document.createElement('div');
+  const followup = isFollowupDue(job);
+  div.className = `jcard${followup ? ' followup' : ''}${job.id === selectedJobId ? ' selected' : ''}`;
+  div.onclick = () => selectJob(job.id);
+
+  let nudgeDot = '';
+  if (followup) nudgeDot = `<div class="jcard-nudge-dot" style="background:var(--amber)"></div>`;
+  else if (job.stage === 'interviewing') nudgeDot = `<div class="jcard-nudge-dot" style="background:var(--sage)"></div>`;
+
+  let tags = '';
+  if (job.type) tags += `<span class="jmeta remote">${job.type}</span>`;
+  if (job.salary) tags += `<span class="jmeta salary">${job.salary}</span>`;
+  if (followup) tags += `<span class="jmeta urgent">${followupDays(job)}d no reply</span>`;
+  if (job.stage === 'closed') tags += `<span class="jmeta rejected">Closed</span>`;
+
+  const dateLabel = job.stage === 'saved' ? `Saved ${formatDate(job.createdAt)}`
+    : job.stage === 'applied' ? `Applied ${formatDate(job.appliedDate || job.createdAt)}`
+    : job.stage === 'interviewing' ? `Round ${job.round || 1}`
+    : job.stage === 'offer' ? `Deadline ${formatDate(job.deadline)}`
+    : formatDate(job.createdAt);
+
+  let followupBanner = '';
+  if (followup) {
+    const days = followupDays(job);
+    followupBanner = `<div class="followup-banner">⏰ Follow-up ${days === 5 ? 'due today' : 'overdue'}</div>`;
+  }
+
+  div.innerHTML = `
+    ${followupBanner}
+    <div class="jcard-company">${escHtml(job.company)}</div>
+    <div class="jcard-role">${escHtml(job.role)}</div>
+    ${tags ? `<div class="jcard-meta">${tags}</div>` : ''}
+    <div class="jcard-footer">
+      <div class="jcard-date">${dateLabel}</div>
+      ${nudgeDot}
+    </div>
+  `;
+  return div;
+}
+
+function selectJob(id) {
+  selectedJobId = id;
+  renderTracker();
+  renderDetail(id);
+}
+
+function renderDetail(id) {
+  const jobs = loadJobs();
+  const job = jobs.find(j => j.id === id);
+  const panel = document.getElementById('detailPanel');
+  if (!job) { panel.classList.add('hidden'); return; }
+  panel.classList.remove('hidden');
+
+  const stageClass = job.stage;
+  const stageLabel = COLUMNS.find(c => c.id === job.stage)?.label || job.stage;
+
+  const nudgeSuggestion = getNudgeSuggestion(job);
+
+  // Timeline based on stage
+  const stages = ['saved', 'applied', 'interviewing', 'offer'];
+  const currentIdx = stages.indexOf(job.stage);
+  let timelineHTML = '';
+  const stageLabels = { saved: 'Saved', applied: 'Applied', interviewing: 'Interviewing', offer: 'Offer / Final' };
+  stages.forEach((s, i) => {
+    const done = i < currentIdx;
+    const pending = i === currentIdx;
+    timelineHTML += `
+      <div class="tl-item">
+        <div class="tl-dot ${done ? 'done' : pending ? 'pending' : ''}"></div>
+        <div class="tl-line"></div>
+        <div>
+          <div class="tl-event">${stageLabels[s]}</div>
+          ${done || pending ? `<div class="tl-date">${i === 0 ? formatDate(job.createdAt) : i === 1 ? formatDate(job.appliedDate || job.createdAt) : '—'}</div>` : ''}
+        </div>
+      </div>
+    `;
+  });
+
+  panel.innerHTML = `
+    <div class="dp-header">
+      <div class="dp-co">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
+      <div class="dp-role">${escHtml(job.role)}</div>
+      <div class="dp-stage ${stageClass}">● ${stageLabel}</div>
+    </div>
+    <div class="dp-body">
+      ${nudgeSuggestion ? `
+      <div class="nudge-suggestion">
+        <div class="ns-label">Nudge ready</div>
+        <div class="ns-text">${nudgeSuggestion}</div>
+        <button class="ns-btn" onclick="nudgeFromJob('${id}')">Prep with nudge →</button>
+      </div>` : ''}
+
+      <div>
+        <div class="dp-section-label">Timeline</div>
+        <div class="timeline">${timelineHTML}</div>
+      </div>
+
+      ${job.notes ? `
+      <div>
+        <div class="dp-section-label">Notes</div>
+        <div style="font-size:12.5px;color:var(--text);line-height:1.55;">${escHtml(job.notes)}</div>
+      </div>` : ''}
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="moveJobStage('${id}', 'forward')" style="flex:1;padding:8px;border-radius:8px;border:0.5px solid var(--border);background:var(--sage-light);color:var(--sage);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;">Move forward →</button>
+        <button onclick="moveJobStage('${id}', 'close')" style="flex:1;padding:8px;border-radius:8px;border:0.5px solid var(--border);background:var(--bg);color:var(--text-soft);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">Archive</button>
+      </div>
+    </div>
+  `;
+}
+
+function getNudgeSuggestion(job) {
+  if (isFollowupDue(job)) return `It's been ${followupDays(job)} days since you applied to ${job.company}. Time to send a follow-up. I'll write one for you.`;
+  if (job.stage === 'interviewing') return `Interviewing at ${job.company}? Prep your "why ${job.company}" answer — it needs to be specific and sharp.`;
+  if (job.stage === 'offer') return `You have an offer from ${job.company}. Before you respond, let's talk salary anchoring.`;
+  if (job.stage === 'saved') return `You saved ${job.role} at ${job.company} but haven't applied. What's stopping you?`;
+  return null;
+}
+
+function nudgeFromJob(id) {
+  const jobs = loadJobs();
+  const job = jobs.find(j => j.id === id);
+  if (!job) return;
+  showView('chat');
+  const suggestion = getNudgeSuggestion(job);
+  if (suggestion) {
+    document.getElementById('input').value = suggestion;
+    autoResize(document.getElementById('input'));
+    document.getElementById('input').focus();
+  }
+}
+
+function moveJobStage(id, dir) {
+  const jobs = loadJobs();
+  const job = jobs.find(j => j.id === id);
+  if (!job) return;
+  const stages = ['saved', 'applied', 'interviewing', 'offer', 'closed'];
+  if (dir === 'close') {
+    job.stage = 'closed';
+  } else {
+    const idx = stages.indexOf(job.stage);
+    if (idx < stages.length - 1) job.stage = stages[idx + 1];
+    if (job.stage === 'applied') job.appliedDate = new Date().toISOString();
+  }
+  saveJobs(jobs);
+  renderTracker();
+  renderDetail(id);
+}
+
+// ─── ADD JOB ──────────────────────────────────────────────
+let prefillStage = 'saved';
+
+function openAddJob(stage) {
+  prefillStage = stage || 'saved';
+  document.getElementById('f-stage').value = prefillStage;
+  document.getElementById('f-company').value = '';
+  document.getElementById('f-role').value = '';
+  document.getElementById('f-location').value = '';
+  document.getElementById('f-salary').value = '';
+  document.getElementById('f-type').value = '';
+  document.getElementById('f-notes').value = '';
+  document.getElementById('modalOverlay').classList.add('visible');
+  setTimeout(() => document.getElementById('f-company').focus(), 100);
+}
+
+function closeAddJob() {
+  document.getElementById('modalOverlay').classList.remove('visible');
+}
+
+function closeModalIfBg(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeAddJob();
+}
+
+function addJob() {
+  const company = document.getElementById('f-company').value.trim();
+  const role = document.getElementById('f-role').value.trim();
+  if (!company || !role) {
+    document.getElementById('f-company').focus();
+    return;
+  }
+  const stage = document.getElementById('f-stage').value;
+  const jobs = loadJobs();
+  const job = {
+    id: 'j_' + Date.now(),
+    company,
+    role,
+    location: document.getElementById('f-location').value.trim(),
+    salary: document.getElementById('f-salary').value.trim(),
+    type: document.getElementById('f-type').value,
+    notes: document.getElementById('f-notes').value.trim(),
+    stage,
+    createdAt: new Date().toISOString(),
+    appliedDate: stage === 'applied' ? new Date().toISOString() : null,
+  };
+  jobs.push(job);
+  saveJobs(jobs);
+  closeAddJob();
+  renderTracker();
+  document.getElementById('tracker-badge').textContent = jobs.filter(j => isFollowupDue(j)).length;
+}
+
+// ─── UTILS ────────────────────────────────────────────────
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// ─── INIT ─────────────────────────────────────────────────
+updateStreak();
+updateNudgesLeft();
+addMsg('coach', "What's stuck right now?");
+renderTracker();
+</script>
+</body>
+</html>
